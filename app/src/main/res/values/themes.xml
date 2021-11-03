@@ -32,10 +32,17 @@
 
     //стиль для разделителей
     <style name="DividerStyle">
-        <item name="backgroundColor">@color/dividerColor</item>
+        <item name="android:background">@color/dividerColor</item>
+        <item name="android:layout_width">1dp</item>
+        <item name="android:layout_height">1dp</item>
     </style>
 
     <style name="AditionalWeatherInformationStyle" parent="MainTextViewStyle">
         <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="AditionalWeatherInformationIconStyle" parent="MainTextViewStyle">
+        <item name="android:layout_height">20dp</item>
+        <item name="android:layout_width">20dp</item>
     </style>
 </resources>

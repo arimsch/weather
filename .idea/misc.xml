@@ -3,7 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/user/AndroidStudioProjects/WeatherF/app/src/main/res/layout/activity_main.xml" value="0.17736289381563594" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/WeatherF/app/src/main/res/drawable/bg_main_bottom_sheet.xml" value="0.1" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/WeatherF/app/src/main/res/drawable/bg_main_bottom_sheet_swiper.xml" value="0.1" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/WeatherF/app/src/main/res/layout/activity_main.xml" value="0.21557719054242003" />
       </map>
     </option>
   </component>
