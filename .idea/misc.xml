@@ -6,6 +6,8 @@
         <entry key="..\:/Users/user/AndroidStudioProjects/WeatherF/app/src/main/res/drawable/bg_main_bottom_sheet.xml" value="0.1" />
         <entry key="..\:/Users/user/AndroidStudioProjects/WeatherF/app/src/main/res/drawable/bg_main_bottom_sheet_swiper.xml" value="0.1" />
         <entry key="..\:/Users/user/AndroidStudioProjects/WeatherF/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/WeatherF/app/src/main/res/layout/item_main_daily.xml" value="0.15299026425591097" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/WeatherF/app/src/main/res/layout/item_main_hourly.xml" value="0.6666666666666666" />
       </map>
     </option>
   </component>
