@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.aimatushkina.weatherf.databinding.ActivityMainBinding
+import com.aimatushkina.weatherf.view.adapters.MainDailyListAdapter
 import com.aimatushkina.weatherf.view.adapters.MainHourlyListAdapter
 
 class MainActivity : AppCompatActivity() {
@@ -23,5 +24,10 @@ class MainActivity : AppCompatActivity() {
             layoutManager= LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             setHasFixedSize(true)
         }
+
+        binding.mainDailyList.adapter=MainDailyListAdapter()
+        binding.mainDailyList.layoutManager=LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false)
+        binding.mainDailyList.setHasFixedSize(true)
     }
+
 }
