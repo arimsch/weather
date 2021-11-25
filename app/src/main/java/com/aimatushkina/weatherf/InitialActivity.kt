@@ -1,6 +1,7 @@
 package com.aimatushkina.weatherf
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -20,7 +21,13 @@ class InitialActivity : AppCompatActivity() {
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
-// TODO тут будет запуск MainActivity
+        if (requestCode== GEO_LOCATION_REQUEST_COD_SUCCESS && permissions.isNotEmpty()){
+//            через интенты запускать активити, передавать информацию
+            val intent=Intent(this,MainActivity::class.java)
+//            для того, чтобы больше никогда не возвращаться в InitialActivity
+            intent.flags=Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+        }
     }
 
     private fun checkPermission(){
