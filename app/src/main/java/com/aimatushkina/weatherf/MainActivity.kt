@@ -9,7 +9,12 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.aimatushkina.weatherf.buisness.model.DailyWeatherModel
+import com.aimatushkina.weatherf.buisness.model.HourlyWeatherModel
+import com.aimatushkina.weatherf.buisness.model.WeatherData
 import com.aimatushkina.weatherf.databinding.ActivityMainBinding
+import com.aimatushkina.weatherf.presenters.MainPresenter
+import com.aimatushkina.weatherf.view.MainView
 import com.aimatushkina.weatherf.view.adapters.MainDailyListAdapter
 import com.aimatushkina.weatherf.view.adapters.MainHourlyListAdapter
 import com.google.android.gms.location.LocationCallback
@@ -17,10 +22,14 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import moxy.MvpAppCompatActivity
+import moxy.ktx.moxyPresenter
 
-const val GEO_LOCATION_REQUEST_COD_SUCCESS=1
+
 const val TAG="geo-test"
-class MainActivity : AppCompatActivity() {
+class MainActivity : MvpAppCompatActivity(), MainView {
+
+    private val mainPresenter by moxyPresenter { MainPresenter() }
 
     private lateinit var binding: ActivityMainBinding
     private val geoService by lazy { LocationServices.getFusedLocationProviderClient(this) }
@@ -35,10 +44,7 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        checkPermission()
-
-
-//        layoutManager отвечает за расположение элементов (прокрутку)
+        //        layoutManager отвечает за расположение элементов (прокрутку)
 //        setMasFixedSize не будет динамичиски изменять размер item
         binding.mainHourlyList.apply {
             adapter = MainHourlyListAdapter()
@@ -52,10 +58,40 @@ class MainActivity : AppCompatActivity() {
             setHasFixedSize(true)
         }
 
+//        начало прослушки данных
+        mainPresenter.enable()
+
         geoService.requestLocationUpdates(locationRequest,geoCallback,null)
     }
 
-        //        location code
+    // -----       moxy code     -----
+    override fun displayLocation(data: String) {
+        binding.mainCityNameTv.text=data
+    }
+
+    override fun displayCurrentData(data: WeatherData) {
+
+    }
+
+    override fun displayHourlyData(data: List<HourlyWeatherModel>) {
+//        binding.mainHourlyList.adapter возвращает данные типа адаптер, MainHourlyListAdapter - наследник от этотго адаптера
+        (binding.mainHourlyList.adapter as MainHourlyListAdapter).updateData(data)
+    }
+
+    override fun displayDailyData(data: List<DailyWeatherModel>) {
+        (binding.mainDailyList.adapter as MainDailyListAdapter).updateData(data)
+    }
+
+    override fun displayError(error: Throwable) {
+
+    }
+
+    override fun setLoading(flag: Boolean) {
+
+    }
+    // -----       /moxy code     -----
+
+    // -----       location code     -----
         private fun initLocationRequest(): LocationRequest{
             val request=LocationRequest.create()
             return request.apply {
@@ -65,43 +101,18 @@ class MainActivity : AppCompatActivity() {
            }
         }
 //    object - анонимный объект
+//    geoCallback функция обратного вызова
     private val geoCallback=object:LocationCallback(){
     override fun onLocationResult(geo: LocationResult) {
         Log.d(TAG,"r: ${geo.locations.size}")
         for (location in geo.locations)
             m_location=location
-        // TODO будет вызов презентора
+        mainPresenter.refresh(m_location.latitude.toString(),m_location.longitude.toString())
         Log.d(TAG, "lat: ${m_location.latitude}")
     }
     }
 
-    //    Start initial activity code
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        Log.d(TAG,"ght:$requestCode")
-// TODO тут будет запуск MainActivity
-    }
 
-    private fun checkPermission(){
-        if(ActivityCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-            ActivityCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED    ){
-            MaterialAlertDialogBuilder(this)
-                .setTitle("Нам нужны геоданные")
-                .setMessage("Пожалйста, разрешите доступ к данным для продолжения работы")
-                .setPositiveButton("ok"){
-                    _,_-> ActivityCompat.requestPermissions(this,
-                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), GEO_LOCATION_REQUEST_COD_SUCCESS)
-                }
-                .setPositiveButton("ok"){
-                        _,_-> ActivityCompat.requestPermissions(this,
-                    arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION), GEO_LOCATION_REQUEST_COD_SUCCESS)
-                }
-                .setNegativeButton("Create"){dialog,_->dialog.dismiss()}
-                .create()
-                .show()
-        }
-    }
+    // -----       /location code     -----
+
 }
